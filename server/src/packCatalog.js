@@ -5,8 +5,8 @@ export const PACK_ODDS = [
     tier: "dark-mode",
     tierLabel: "Gold Tier",
     rarityRank: 1,
-    probability: 0.01,
-    probabilityLabel: "1%",
+    probability: 0.03,
+    probabilityLabel: "3%",
     accent: "#ffd54d",
   },
   {
@@ -45,8 +45,8 @@ export const PACK_ODDS = [
     tier: "basic-mode",
     tierLabel: "Basic",
     rarityRank: 5,
-    probability: 0.54,
-    probabilityLabel: "54%",
+    probability: 0.52,
+    probabilityLabel: "52%",
     accent: "#f1f1f1",
   },
 ];
