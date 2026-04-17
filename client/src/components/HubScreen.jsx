@@ -5,9 +5,10 @@ import { PackArtwork, ShirtArtwork } from "./Artwork.jsx";
 import PhoneShell from "./PhoneShell.jsx";
 import { SHIRTS } from "../lib/shirts.js";
 
-export default function HubScreen({ viewer, onLogout }) {
+export default function HubScreen({ viewer, onLogout, onResetPack }) {
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [resettingPack, setResettingPack] = useState(false);
 
   async function handleLogout() {
     try {
@@ -16,6 +17,15 @@ export default function HubScreen({ viewer, onLogout }) {
       navigate("/", { replace: true });
     } finally {
       setLoggingOut(false);
+    }
+  }
+
+  async function handleResetPack() {
+    try {
+      setResettingPack(true);
+      await onResetPack();
+    } finally {
+      setResettingPack(false);
     }
   }
 
@@ -83,6 +93,17 @@ export default function HubScreen({ viewer, onLogout }) {
             type="button"
           >
             Open Your Pack
+          </button>
+        ) : null}
+
+        {viewer.packsAvailable < 1 ? (
+          <button
+            className="secondary-button"
+            disabled={resettingPack}
+            onClick={handleResetPack}
+            type="button"
+          >
+            {resettingPack ? "Resetting Pack..." : "Temporary Reset Pack"}
           </button>
         ) : null}
       </div>

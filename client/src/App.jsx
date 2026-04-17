@@ -110,6 +110,15 @@ export default function App() {
     return payload;
   }, []);
 
+  const handleResetPack = useCallback(async () => {
+    const payload = await request("/api/packs/reset", {
+      method: "POST",
+    });
+
+    setViewer(payload.user);
+    return payload;
+  }, []);
+
   if (booting) {
     return (
       <div className="app-shell">
@@ -149,7 +158,11 @@ export default function App() {
       <Route
         element={
           viewer ? (
-            <HubScreen onLogout={handleLogout} viewer={viewer} />
+            <HubScreen
+              onLogout={handleLogout}
+              onResetPack={handleResetPack}
+              viewer={viewer}
+            />
           ) : (
             <Navigate replace to="/" />
           )

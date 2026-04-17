@@ -347,6 +347,67 @@ app.post("/api/packs/open", requireAuth, async (req, res) => {
   }
 });
 
+app.post("/api/packs/reset", requireAuth, async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Temporary dev helper: restore the signed-in user's unopened pack.
+    const userResult = await client.query(
+      `
+        SELECT id
+        FROM users
+        WHERE id = $1
+        FOR UPDATE
+      `,
+      [req.userId],
+    );
+
+    if (!userResult.rowCount) {
+      await client.query("ROLLBACK");
+      res.status(404).json({ error: "User not found." });
+      return;
+    }
+
+    await client.query(
+      `
+        DELETE FROM pulls
+        WHERE user_id = $1
+      `,
+      [req.userId],
+    );
+
+    await client.query(
+      `
+        UPDATE users
+        SET packs_available = 1
+        WHERE id = $1
+      `,
+      [req.userId],
+    );
+
+    const viewer = await fetchViewer(client, req.userId);
+    const leaderboard = await fetchLeaderboard(client);
+
+    await client.query("COMMIT");
+
+    broadcastLeaderboard(leaderboard);
+    setSessionCookie(res, viewer);
+    res.json({
+      ok: true,
+      user: viewer,
+      leaderboard,
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("reset-pack error", error);
+    res.status(500).json({ error: "Unable to reset the pack right now." });
+  } finally {
+    client.release();
+  }
+});
+
 app.get("/api/leaderboard", async (_req, res) => {
   try {
     const leaderboard = await fetchLeaderboard(pool);
