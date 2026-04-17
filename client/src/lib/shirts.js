@@ -2,7 +2,7 @@ export const SHIRTS = [
   {
     key: "dark-mode",
     name: "Gold Shirt",
-    tierLabel: "Gold Tier",
+    tierLabel: "Gold Shirt",
     probability: 0.03,
     probabilityLabel: "3%",
     rarityRank: 1,
@@ -15,7 +15,7 @@ export const SHIRTS = [
   {
     key: "purple-mode",
     name: "Purple Shirt",
-    tierLabel: "Purple Mode",
+    tierLabel: "Purple Shirt",
     probability: 0.05,
     probabilityLabel: "5%",
     rarityRank: 2,
@@ -28,7 +28,7 @@ export const SHIRTS = [
   {
     key: "blue-mode",
     name: "Blue Shirt",
-    tierLabel: "Blue Mode",
+    tierLabel: "Blue Shirt",
     probability: 0.1,
     probabilityLabel: "10%",
     rarityRank: 3,
@@ -41,7 +41,7 @@ export const SHIRTS = [
   {
     key: "scarlet-mode",
     name: "Scarlet Shirt",
-    tierLabel: "Scarlet Mode",
+    tierLabel: "Scarlet Shirt",
     probability: 0.3,
     probabilityLabel: "30%",
     rarityRank: 4,
@@ -54,7 +54,7 @@ export const SHIRTS = [
   {
     key: "basic-mode",
     name: "Basic Shirt",
-    tierLabel: "Basic",
+    tierLabel: "Basic Shirt",
     probability: 0.52,
     probabilityLabel: "52%",
     rarityRank: 5,
