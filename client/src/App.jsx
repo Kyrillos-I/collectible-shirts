@@ -9,6 +9,7 @@ import VerificationScreen from "./components/VerificationScreen.jsx";
 import { request } from "./lib/api.js";
 
 const PENDING_AUTH_KEY = "collectible-shirts.pending-auth";
+const HOME_PATH = "/home";
 
 export default function App() {
   const [viewer, setViewer] = useState(null);
@@ -124,7 +125,7 @@ export default function App() {
       <Route
         element={
           viewer ? (
-            <Navigate replace to="/hub" />
+            <Navigate replace to={HOME_PATH} />
           ) : (
             <AuthScreen onRequestCode={handleRequestCode} />
           )
@@ -134,7 +135,7 @@ export default function App() {
       <Route
         element={
           viewer ? (
-            <Navigate replace to="/hub" />
+            <Navigate replace to={HOME_PATH} />
           ) : (
             <VerificationScreen
               onResend={handleResendCode}
@@ -153,7 +154,7 @@ export default function App() {
             <Navigate replace to="/" />
           )
         }
-        path="/hub"
+        path={HOME_PATH}
       />
       <Route
         element={
@@ -169,8 +170,9 @@ export default function App() {
         element={<LeaderboardScreen viewer={viewer} />}
         path="/leaderboard"
       />
+      <Route element={<Navigate replace to={HOME_PATH} />} path="/hub" />
       <Route
-        element={<Navigate replace to={viewer ? "/hub" : "/"} />}
+        element={<Navigate replace to={viewer ? HOME_PATH : "/"} />}
         path="*"
       />
     </Routes>

@@ -16,6 +16,7 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
 
   const [progress, setProgress] = useState(0);
   const [maxTravel, setMaxTravel] = useState(0);
+  const [knobWidth, setKnobWidth] = useState(64);
   const [isDragging, setIsDragging] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -31,8 +32,10 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
     }
 
     const updateMetrics = () => {
+      const nextKnobWidth = knobRef.current.clientWidth;
       const travel =
-        trackRef.current.clientWidth - knobRef.current.clientWidth - 18;
+        trackRef.current.clientWidth - nextKnobWidth - 18;
+      setKnobWidth(nextKnobWidth);
       setMaxTravel(Math.max(travel, 0));
     };
 
@@ -61,7 +64,7 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
   }, [revealedPull]);
 
   if (viewer.packsAvailable < 1 && !revealedPull && !isOpening) {
-    return <Navigate replace to="/hub" />;
+    return <Navigate replace to="/home" />;
   }
 
   function commitProgress(nextProgress) {
@@ -163,9 +166,14 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
     );
   }
 
+  const progressWidth = Math.max(
+    knobWidth * 0.38,
+    progress * maxTravel + knobWidth * 0.38,
+  );
+
   return (
     <PhoneShell
-      backTo="/hub"
+      backTo="/home"
       footer={revealedPull ? null : renderLeaderboardChip()}
     >
       {showGoldConfetti ? <GoldConfetti /> : null}
@@ -217,8 +225,8 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
               {renderLeaderboardChip(
                 "leaderboard-chip leaderboard-chip--inline button-link",
               )}
-              <Link className="ghost-button button-link" to="/hub">
-                Back To Hub
+              <Link className="ghost-button button-link" to="/home">
+                Back To Home
               </Link>
             </div>
           </div>
@@ -237,7 +245,7 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
             >
               <div
                 className="swipe-progress"
-                style={{ width: `${24 + progress * 70}%` }}
+                style={{ width: `${progressWidth}px` }}
               />
               <div className="swipe-instruction">Slide To Reveal</div>
               <div

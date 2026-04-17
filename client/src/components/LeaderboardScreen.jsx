@@ -73,7 +73,7 @@ export default function LeaderboardScreen({ viewer }) {
     };
   }, []);
 
-  const backTo = viewer ? "/hub" : "/";
+  const backTo = viewer ? "/home" : "/";
   const topEntry = leaderboard.topEntry;
   const restEntries = leaderboard.entries.slice(1);
   const topIsGold = topEntry?.shirt?.shirtKey === GOLD_SHIRT_KEY;
@@ -90,7 +90,7 @@ export default function LeaderboardScreen({ viewer }) {
   const viewerName = getLeaderboardName(viewer);
 
   return (
-    <PhoneShell backTo={backTo} backLabel={viewer ? "Hub" : "Home"}>
+    <PhoneShell backTo={backTo} backLabel="Home">
       {showGoldConfetti ? <GoldConfetti /> : null}
 
       <section className="leaderboard-hero">

@@ -40,7 +40,7 @@ export default function VerificationScreen({
       setVerifying(true);
       setError("");
       await onVerify({ code: nextCode });
-      navigate("/hub", { replace: true });
+      navigate("/home", { replace: true });
     } catch (verificationError) {
       setError(verificationError.message);
       setCode("");
@@ -122,4 +122,3 @@ export default function VerificationScreen({
     </PhoneShell>
   );
 }
-

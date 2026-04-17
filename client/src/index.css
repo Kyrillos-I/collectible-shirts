@@ -86,7 +86,7 @@ a {
 .brand-title {
   color: var(--rutgers);
   font-size: 24px;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
   margin: 0;
   text-transform: uppercase;
 }
@@ -170,6 +170,7 @@ a {
 .section-heading {
   color: var(--rutgers);
   font-size: 2rem;
+  letter-spacing: -0.03em;
   text-decoration: underline;
   text-underline-offset: 8px;
 }
@@ -982,6 +983,17 @@ svg.chance-art {
 
 .button-cluster {
   margin-top: 6px;
+}
+
+.hub-footer-actions {
+  align-items: center;
+  margin: 0 auto;
+  max-width: 360px;
+  width: 100%;
+}
+
+.hub-footer-logout {
+  width: 100%;
 }
 
 .visually-hidden {

@@ -22,15 +22,29 @@ export default function HubScreen({ viewer, onLogout }) {
   return (
     <PhoneShell
       footer={
-        <Link aria-label="Leaderboard" className="leaderboard-chip" to="/leaderboard">
-          <img
-            alt=""
-            aria-hidden="true"
-            className="leaderboard-chip-image"
-            src="/images/leaderboard.png"
-          />
-          <span>Leaderboard</span>
-        </Link>
+        <div className="button-cluster hub-footer-actions">
+          <Link
+            aria-label="Leaderboard"
+            className="leaderboard-chip"
+            to="/leaderboard"
+          >
+            <img
+              alt=""
+              aria-hidden="true"
+              className="leaderboard-chip-image"
+              src="/images/leaderboard.png"
+            />
+            <span>Leaderboard</span>
+          </Link>
+          <button
+            className="ghost-button hub-footer-logout"
+            disabled={loggingOut}
+            onClick={handleLogout}
+            type="button"
+          >
+            {loggingOut ? "Logging Out..." : "Log Out"}
+          </button>
+        </div>
       }
     >
       <section className="welcome-copy">
@@ -89,10 +103,6 @@ export default function HubScreen({ viewer, onLogout }) {
           ))}
         </div>
       </section>
-
-      <button className="ghost-button" onClick={handleLogout} type="button">
-        {loggingOut ? "Logging Out..." : "Log Out"}
-      </button>
     </PhoneShell>
   );
 }
