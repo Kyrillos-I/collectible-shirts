@@ -1,0 +1,176 @@
+const GOLD_CONFETTI_PIECES = [
+  {
+    color: "#ffd54d",
+    delay: "-0.6s",
+    drift: "-34px",
+    duration: "3.1s",
+    left: "4%",
+    rotate: "18deg",
+    shape: "rect",
+    size: 10,
+  },
+  {
+    color: "#fff4c2",
+    delay: "-1.4s",
+    drift: "42px",
+    duration: "3.8s",
+    left: "11%",
+    rotate: "-22deg",
+    shape: "coin",
+    size: 11,
+  },
+  {
+    color: "#cc0033",
+    delay: "-0.2s",
+    drift: "-18px",
+    duration: "3.3s",
+    left: "18%",
+    rotate: "12deg",
+    shape: "ribbon",
+    size: 9,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-1.8s",
+    drift: "26px",
+    duration: "4s",
+    left: "24%",
+    rotate: "-28deg",
+    shape: "rect",
+    size: 12,
+  },
+  {
+    color: "#fff8e0",
+    delay: "-0.9s",
+    drift: "-28px",
+    duration: "3.4s",
+    left: "31%",
+    rotate: "24deg",
+    shape: "coin",
+    size: 8,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-2.2s",
+    drift: "30px",
+    duration: "4.2s",
+    left: "38%",
+    rotate: "-14deg",
+    shape: "rect",
+    size: 10,
+  },
+  {
+    color: "#ffef9b",
+    delay: "-0.4s",
+    drift: "-16px",
+    duration: "3.2s",
+    left: "45%",
+    rotate: "8deg",
+    shape: "ribbon",
+    size: 9,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-1.1s",
+    drift: "18px",
+    duration: "3.7s",
+    left: "52%",
+    rotate: "-32deg",
+    shape: "coin",
+    size: 10,
+  },
+  {
+    color: "#fff4c2",
+    delay: "-2.4s",
+    drift: "-38px",
+    duration: "4.3s",
+    left: "58%",
+    rotate: "20deg",
+    shape: "rect",
+    size: 11,
+  },
+  {
+    color: "#cc0033",
+    delay: "-0.7s",
+    drift: "16px",
+    duration: "3.4s",
+    left: "64%",
+    rotate: "-18deg",
+    shape: "ribbon",
+    size: 8,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-1.9s",
+    drift: "-24px",
+    duration: "3.9s",
+    left: "70%",
+    rotate: "34deg",
+    shape: "coin",
+    size: 12,
+  },
+  {
+    color: "#fff8e0",
+    delay: "-0.1s",
+    drift: "36px",
+    duration: "3.1s",
+    left: "76%",
+    rotate: "-10deg",
+    shape: "rect",
+    size: 9,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-1.5s",
+    drift: "-30px",
+    duration: "4.1s",
+    left: "82%",
+    rotate: "22deg",
+    shape: "ribbon",
+    size: 10,
+  },
+  {
+    color: "#fff4c2",
+    delay: "-2.1s",
+    drift: "22px",
+    duration: "3.5s",
+    left: "89%",
+    rotate: "-26deg",
+    shape: "coin",
+    size: 8,
+  },
+  {
+    color: "#ffd54d",
+    delay: "-0.8s",
+    drift: "-20px",
+    duration: "3.6s",
+    left: "95%",
+    rotate: "16deg",
+    shape: "rect",
+    size: 10,
+  },
+];
+
+export const GOLD_SHIRT_KEY = "dark-mode";
+
+export default function GoldConfetti() {
+  return (
+    <div aria-hidden="true" className="confetti-burst">
+      {GOLD_CONFETTI_PIECES.map((piece, index) => (
+        <span
+          key={index}
+          className={`confetti-piece confetti-piece--${piece.shape}`}
+          style={{
+            "--confetti-color": piece.color,
+            "--confetti-delay": piece.delay,
+            "--confetti-drift": piece.drift,
+            "--confetti-duration": piece.duration,
+            "--confetti-left": piece.left,
+            "--confetti-rotate": piece.rotate,
+            "--confetti-size": `${piece.size}px`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}

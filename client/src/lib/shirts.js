@@ -1,0 +1,75 @@
+export const SHIRTS = [
+  {
+    key: "dark-mode",
+    name: "Gold Shirt",
+    tierLabel: "Gold Tier",
+    probability: 0.01,
+    probabilityLabel: "1%",
+    rarityRank: 1,
+    accent: "#ffd54d",
+    jersey: "#232323",
+    shadow: "rgba(255, 213, 77, 0.24)",
+    trim: "#9a9a9a",
+    textColor: "#111111",
+  },
+  {
+    key: "purple-mode",
+    name: "Purple Shirt",
+    tierLabel: "Purple Mode",
+    probability: 0.05,
+    probabilityLabel: "5%",
+    rarityRank: 2,
+    accent: "#8f5bff",
+    jersey: "#6f38f5",
+    shadow: "rgba(143, 91, 255, 0.28)",
+    trim: "#d5c7ff",
+    textColor: "#f7f2ff",
+  },
+  {
+    key: "blue-mode",
+    name: "Blue Shirt",
+    tierLabel: "Blue Mode",
+    probability: 0.1,
+    probabilityLabel: "10%",
+    rarityRank: 3,
+    accent: "#4285f4",
+    jersey: "#1666e5",
+    shadow: "rgba(66, 133, 244, 0.26)",
+    trim: "#9cc5ff",
+    textColor: "#0f2961",
+  },
+  {
+    key: "scarlet-mode",
+    name: "Scarlet Shirt",
+    tierLabel: "Scarlet Mode",
+    probability: 0.3,
+    probabilityLabel: "30%",
+    rarityRank: 4,
+    accent: "#cc0033",
+    jersey: "#c51633",
+    shadow: "rgba(204, 0, 51, 0.28)",
+    trim: "#ff9bac",
+    textColor: "#5d071e",
+  },
+  {
+    key: "basic-mode",
+    name: "Basic Shirt",
+    tierLabel: "Basic",
+    probability: 0.54,
+    probabilityLabel: "54%",
+    rarityRank: 5,
+    accent: "#f5f5f5",
+    jersey: "#f4f4f4",
+    shadow: "rgba(255, 255, 255, 0.16)",
+    trim: "#bebebe",
+    textColor: "#5a5a5a",
+  },
+];
+
+export const SHIRT_MAP = Object.fromEntries(
+  SHIRTS.map((shirt) => [shirt.key, shirt]),
+);
+
+export function getShirtTheme(key) {
+  return SHIRT_MAP[key] ?? SHIRT_MAP["basic-mode"];
+}
