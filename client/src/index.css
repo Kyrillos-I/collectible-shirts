@@ -55,7 +55,8 @@ a {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: min(100%, 1100px);
+  max-width: min(1100px, 80vw);
+  width: 100%;
 }
 
 .loading-panel {
@@ -1101,6 +1102,12 @@ svg.chance-art {
 
   .leaderboard-live-pill--live .leaderboard-live-dot {
     animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    max-width: 100%;
   }
 }
 
