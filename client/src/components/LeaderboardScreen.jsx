@@ -9,6 +9,7 @@ export default function LeaderboardScreen({ viewer }) {
     entries: [],
     topEntry: null,
   });
+  const [sharePanelOpen, setSharePanelOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [connectionStatus, setConnectionStatus] = useState("connecting");
@@ -93,73 +94,122 @@ export default function LeaderboardScreen({ viewer }) {
     <PhoneShell backTo={backTo} backLabel="Home">
       {showGoldConfetti ? <GoldConfetti /> : null}
 
-      <section className="leaderboard-hero">
-        <div className="leaderboard-statusbar">
-          <div
-            className={`leaderboard-live-pill leaderboard-live-pill--${connectionStatus}`}
-          >
-            <span className="leaderboard-live-dot" />
-            <span>{connectionLabel}</span>
-          </div>
-          <p className="leaderboard-last-updated">{lastUpdatedLabel}</p>
-        </div>
-      </section>
-
-      {loading ? (
-        <p className="status-message info">Loading the standings...</p>
-      ) : null}
-      {error ? <p className="status-message error">{error}</p> : null}
-
-      {topEntry ? (
-        <article
-          className={`podium-card ${topIsGold ? "podium-card--gold" : ""}`}
+      <div className="leaderboard-layout">
+        <aside
+          aria-hidden={!sharePanelOpen}
+          id="leaderboard-share-panel"
+          className={`leaderboard-share-panel ${
+            sharePanelOpen ? "leaderboard-share-panel--open" : ""
+          }`}
         >
-          {topIsGold ? (
-            <div className="podium-winner-badge">Gift Card Winner</div>
-          ) : null}
-          <div className="podium-rank">01</div>
-          <p className="podium-tier" style={{ color: topEntry.shirt.accent }}>
-            {topEntry.shirt.tierLabel}
-          </p>
-          <h1 className="podium-name">{getLeaderboardName(topEntry)}</h1>
-          <p className="podium-pull">Opened: {topEntry.shirt.shirtName}</p>
-          <div className="podium-probability">
-            <span>Probability</span>
-            <strong>{topEntry.shirt.probabilityLabel}</strong>
-          </div>
-        </article>
-      ) : (
-        <div className="empty-state">
-          The board is empty right now. Open the first pack to set the pace.
-        </div>
-      )}
-
-      <section className="entry-list">
-        {restEntries.map((entry) => {
-          const entryName = getLeaderboardName(entry);
-          const isViewer = Boolean(viewerName) && viewerName === entryName;
-          const isGoldEntry = entry.shirt.shirtKey === GOLD_SHIRT_KEY;
-
-          return (
-            <article
-              className={`entry-card ${isViewer ? "entry-card--viewer" : ""} ${
-                isGoldEntry ? "entry-card--gold" : ""
-              }`}
-              key={entry.id}
+          <div className="leaderboard-share-panel__card">
+            <p className="leaderboard-share-panel__eyebrow">Scan to open</p>
+            <img
+              alt="QR code linking to Collectible Shirts"
+              className="leaderboard-share-panel__qr"
+              src="/images/collectible-shirts-qr (1).png"
+            />
+            <a
+              className="leaderboard-share-panel__link"
+              href="https://tinyurl.com/collectible-shirts"
+              rel="noreferrer"
+              target="_blank"
             >
-              <div className="entry-rank">
-                {String(entry.rank).padStart(2, "0")}
+              tinyurl.com/collectible-shirts
+            </a>
+          </div>
+        </aside>
+
+        <button
+          aria-controls="leaderboard-share-panel"
+          aria-expanded={sharePanelOpen}
+          aria-label={sharePanelOpen ? "Hide QR panel" : "Show QR panel"}
+          className={`leaderboard-share-toggle ${
+            sharePanelOpen ? "leaderboard-share-toggle--open" : ""
+          }`}
+          onClick={() => setSharePanelOpen((open) => !open)}
+          type="button"
+        >
+          <span className="leaderboard-share-toggle__text">QR</span>
+        </button>
+
+        <div
+          className={`leaderboard-main ${
+            sharePanelOpen ? "leaderboard-main--panel-open" : ""
+          }`}
+        >
+          <section className="leaderboard-hero">
+            <div className="leaderboard-statusbar">
+              <div
+                className={`leaderboard-live-pill leaderboard-live-pill--${connectionStatus}`}
+              >
+                <span className="leaderboard-live-dot" />
+                <span>{connectionLabel}</span>
               </div>
-              <div className="entry-copy">
-                <h2 className="entry-handle">{entryName}</h2>
-                <p className="entry-tier" style={{ color: entry.shirt.accent }}>
-                  {entry.shirt.tierLabel} ({entry.shirt.probabilityLabel})
-                </p>
+              <p className="leaderboard-last-updated">{lastUpdatedLabel}</p>
+            </div>
+          </section>
+
+          {loading ? (
+            <p className="status-message info">Loading the standings...</p>
+          ) : null}
+          {error ? <p className="status-message error">{error}</p> : null}
+
+          {topEntry ? (
+            <article
+              className={`podium-card ${topIsGold ? "podium-card--gold" : ""}`}
+            >
+              {topIsGold ? (
+                <div className="podium-winner-badge">Gift Card Winner</div>
+              ) : null}
+              <div className="podium-rank">01</div>
+              <p className="podium-tier" style={{ color: topEntry.shirt.accent }}>
+                {topEntry.shirt.tierLabel}
+              </p>
+              <h1 className="podium-name">{getLeaderboardName(topEntry)}</h1>
+              <p className="podium-pull">Opened: {topEntry.shirt.shirtName}</p>
+              <div className="podium-probability">
+                <span>Probability</span>
+                <strong>{topEntry.shirt.probabilityLabel}</strong>
               </div>
             </article>
-          );
-        })}
-      </section>
+          ) : (
+            <div className="empty-state">
+              The board is empty right now. Open the first pack to set the pace.
+            </div>
+          )}
+
+          <section className="entry-list">
+            {restEntries.map((entry) => {
+              const entryName = getLeaderboardName(entry);
+              const isViewer = Boolean(viewerName) && viewerName === entryName;
+              const isGoldEntry = entry.shirt.shirtKey === GOLD_SHIRT_KEY;
+
+              return (
+                <article
+                  className={`entry-card ${
+                    isViewer ? "entry-card--viewer" : ""
+                  } ${isGoldEntry ? "entry-card--gold" : ""}`}
+                  key={entry.id}
+                >
+                  <div className="entry-rank">
+                    {String(entry.rank).padStart(2, "0")}
+                  </div>
+                  <div className="entry-copy">
+                    <h2 className="entry-handle">{entryName}</h2>
+                    <p
+                      className="entry-tier"
+                      style={{ color: entry.shirt.accent }}
+                    >
+                      {entry.shirt.tierLabel} ({entry.shirt.probabilityLabel})
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+          </section>
+        </div>
+      </div>
     </PhoneShell>
   );
 }

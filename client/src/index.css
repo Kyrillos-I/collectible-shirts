@@ -860,6 +860,124 @@ svg.chance-art {
   gap: 4px;
 }
 
+.leaderboard-layout {
+  position: relative;
+}
+
+.leaderboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  transition: transform 240ms ease;
+}
+
+.leaderboard-main--panel-open {
+  transform: translateX(10px);
+}
+
+.leaderboard-share-panel {
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: translateX(-100%);
+  transition:
+    opacity 220ms ease,
+    transform 260ms ease;
+  width: min(280px, calc(100vw - 56px));
+  z-index: 3;
+}
+
+.leaderboard-share-panel--open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.leaderboard-share-panel__card {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgba(204, 0, 51, 0.14), rgba(20, 14, 14, 0.96)),
+    rgba(28, 27, 27, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+
+.leaderboard-share-panel__eyebrow {
+  color: #ffd7df;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.leaderboard-share-panel__qr {
+  background: #fff;
+  border-radius: 14px;
+  display: block;
+  max-width: 100%;
+  padding: 12px;
+  width: 100%;
+}
+
+.leaderboard-share-panel__link {
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  word-break: break-word;
+}
+
+.leaderboard-share-toggle {
+  align-items: center;
+  background: linear-gradient(180deg, rgba(204, 0, 51, 0.92), #71001c);
+  border: 0;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  display: inline-flex;
+  height: 104px;
+  justify-content: center;
+  left: -18px;
+  padding: 0 14px;
+  position: absolute;
+  top: 116px;
+  transition:
+    left 260ms ease,
+    transform 220ms ease;
+  width: 52px;
+  writing-mode: vertical-rl;
+  z-index: 4;
+}
+
+.leaderboard-share-toggle:hover {
+  transform: translateX(2px);
+}
+
+.leaderboard-share-toggle--open {
+  left: min(230px, calc(100vw - 110px));
+}
+
+.leaderboard-share-toggle__text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
 .leaderboard-statusbar {
   align-items: center;
   display: flex;
@@ -1006,6 +1124,29 @@ svg.chance-art {
   padding: 0;
   position: absolute;
   width: 1px;
+}
+
+@media (max-width: 720px) {
+  .leaderboard-main--panel-open {
+    transform: translateX(0);
+  }
+
+  .leaderboard-share-panel {
+    right: 0;
+    width: 100%;
+  }
+
+  .leaderboard-share-toggle {
+    top: 92px;
+  }
+
+  .leaderboard-share-toggle--open {
+    left: calc(100% - 52px);
+  }
+
+  .leaderboard-share-panel__card {
+    padding: 16px;
+  }
 }
 
 @keyframes knobTease {
