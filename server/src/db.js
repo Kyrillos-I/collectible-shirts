@@ -29,6 +29,21 @@ async function ensureInventorySchema() {
     ADD COLUMN IF NOT EXISTS copies_total INTEGER
   `);
 
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'pulls'
+          AND column_name = 'probability'
+      ) THEN
+        ALTER TABLE pulls
+        ALTER COLUMN probability DROP NOT NULL;
+      END IF;
+    END $$;
+  `);
+
   for (const shirt of SHIRT_CATALOG) {
     await pool.query(
       `
