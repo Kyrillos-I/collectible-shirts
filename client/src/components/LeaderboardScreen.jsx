@@ -130,7 +130,8 @@ export default function LeaderboardScreen({ viewer }) {
           onClick={() => setSharePanelOpen((open) => !open)}
           type="button"
         >
-          <span className="leaderboard-share-toggle__text">QR</span>
+          <span aria-hidden="true" className="leaderboard-share-toggle__slit" />
+          <span aria-hidden="true" className="leaderboard-share-toggle__dot" />
         </button>
 
         <div

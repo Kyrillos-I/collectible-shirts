@@ -872,21 +872,22 @@ svg.chance-art {
 }
 
 .leaderboard-main--panel-open {
-  transform: translateX(10px);
+  transform: translateX(42px);
 }
 
 .leaderboard-share-panel {
-  left: 0;
+  bottom: 0;
   opacity: 0;
   pointer-events: none;
-  position: absolute;
+  position: fixed;
+  left: 0;
   top: 0;
   transform: translateX(-100%);
   transition:
     opacity 220ms ease,
     transform 260ms ease;
-  width: min(280px, calc(100vw - 56px));
-  z-index: 3;
+  width: min(248px, 22vw);
+  z-index: 20;
 }
 
 .leaderboard-share-panel--open {
@@ -898,19 +899,21 @@ svg.chance-art {
 .leaderboard-share-panel__card {
   align-items: center;
   background:
-    linear-gradient(180deg, rgba(204, 0, 51, 0.14), rgba(20, 14, 14, 0.96)),
-    rgba(28, 27, 27, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+    linear-gradient(180deg, rgba(204, 0, 51, 0.08), rgba(14, 14, 14, 0.98)),
+    rgba(18, 18, 18, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 18px 0 48px rgba(0, 0, 0, 0.24);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px;
+  gap: 18px;
+  height: 100%;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px 20px;
 }
 
 .leaderboard-share-panel__eyebrow {
-  color: #ffd7df;
+  color: rgba(255, 215, 223, 0.72);
   font-family: "Space Grotesk", sans-serif;
   font-size: 0.76rem;
   font-weight: 700;
@@ -921,19 +924,19 @@ svg.chance-art {
 
 .leaderboard-share-panel__qr {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 12px;
   display: block;
   max-width: 100%;
-  padding: 12px;
+  padding: 10px;
   width: 100%;
 }
 
 .leaderboard-share-panel__link {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.82);
   font-family: "Space Grotesk", sans-serif;
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-align: center;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -942,40 +945,52 @@ svg.chance-art {
 
 .leaderboard-share-toggle {
   align-items: center;
-  background: linear-gradient(180deg, rgba(204, 0, 51, 0.92), #71001c);
-  border: 0;
-  border-radius: 0 14px 14px 0;
-  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.3);
-  color: #fff;
-  display: inline-flex;
-  height: 104px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 0;
+  border-radius: 0 999px 999px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 72px;
   justify-content: center;
-  left: -18px;
-  padding: 0 14px;
-  position: absolute;
-  top: 116px;
+  left: 0;
+  padding: 0;
+  position: fixed;
+  top: 50%;
   transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
     left 260ms ease,
     transform 220ms ease;
-  width: 52px;
-  writing-mode: vertical-rl;
-  z-index: 4;
+  transform: translateY(-50%);
+  width: 18px;
+  z-index: 21;
 }
 
 .leaderboard-share-toggle:hover {
-  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .leaderboard-share-toggle--open {
-  left: min(230px, calc(100vw - 110px));
+  left: min(248px, 22vw);
 }
 
-.leaderboard-share-toggle__text {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+.leaderboard-share-toggle__slit {
+  background: rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  display: block;
+  height: 22px;
+  width: 1px;
+}
+
+.leaderboard-share-toggle__dot {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  display: block;
+  height: 4px;
+  width: 4px;
 }
 
 .leaderboard-statusbar {
@@ -1126,26 +1141,14 @@ svg.chance-art {
   width: 1px;
 }
 
-@media (max-width: 720px) {
-  .leaderboard-main--panel-open {
-    transform: translateX(0);
-  }
-
-  .leaderboard-share-panel {
-    right: 0;
-    width: 100%;
-  }
-
+@media (max-width: 767px) {
+  .leaderboard-share-panel,
   .leaderboard-share-toggle {
-    top: 92px;
+    display: none;
   }
 
-  .leaderboard-share-toggle--open {
-    left: calc(100% - 52px);
-  }
-
-  .leaderboard-share-panel__card {
-    padding: 16px;
+  .leaderboard-main--panel-open {
+    transform: none;
   }
 }
 
