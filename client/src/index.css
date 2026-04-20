@@ -915,9 +915,9 @@ svg.chance-art {
 .leaderboard-share-panel__eyebrow {
   color: rgba(255, 215, 223, 0.72);
   font-family: "Space Grotesk", sans-serif;
-  font-size: 0.76rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   margin: 0;
   text-transform: uppercase;
 }
@@ -931,10 +931,20 @@ svg.chance-art {
   width: 100%;
 }
 
+.leaderboard-share-panel__copy {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin: -2px 0 -6px;
+  text-transform: uppercase;
+}
+
 .leaderboard-share-panel__link {
   color: rgba(255, 255, 255, 0.82);
   font-family: "Space Grotesk", sans-serif;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-align: center;

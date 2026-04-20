@@ -109,6 +109,7 @@ export default function LeaderboardScreen({ viewer }) {
               className="leaderboard-share-panel__qr"
               src="/images/collectible-shirts-qr (1).png"
             />
+            <p className="leaderboard-share-panel__copy">or go to</p>
             <a
               className="leaderboard-share-panel__link"
               href="https://tinyurl.com/collectible-shirts"
