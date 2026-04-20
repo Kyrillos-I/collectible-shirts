@@ -11,7 +11,12 @@ import { Resend } from "resend";
 
 import { config } from "./config.js";
 import { initializeDatabase, pool } from "./db.js";
-import { PACK_ODDS, rollPack } from "./packCatalog.js";
+import {
+  getLimitedLabel,
+  pickInventoryShirt,
+  SHIRT_BY_KEY,
+  TOTAL_PACK_COUNT,
+} from "./packCatalog.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -291,7 +296,37 @@ app.post("/api/packs/open", requireAuth, async (req, res) => {
       return;
     }
 
-    const shirt = rollPack();
+    const inventoryResult = await client.query(
+      `
+        SELECT
+          shirt_key,
+          shirt_name,
+          tier,
+          rarity_rank,
+          total_count,
+          remaining_count
+        FROM inventory
+        ORDER BY rarity_rank ASC
+        FOR UPDATE
+      `,
+    );
+
+    const shirt = pickInventoryShirt(inventoryResult.rows);
+
+    if (!shirt) {
+      await client.query("ROLLBACK");
+      res.status(400).json({ error: "All 56 packs have been opened." });
+      return;
+    }
+
+    await client.query(
+      `
+        UPDATE inventory
+        SET remaining_count = remaining_count - 1
+        WHERE shirt_key = $1
+      `,
+      [shirt.shirt_key],
+    );
 
     const pullResult = await client.query(
       `
@@ -301,18 +336,18 @@ app.post("/api/packs/open", requireAuth, async (req, res) => {
           shirt_name,
           tier,
           rarity_rank,
-          probability
+          copies_total
         )
         VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING id, shirt_key, shirt_name, tier, rarity_rank, probability, created_at
+        RETURNING id, shirt_key, shirt_name, tier, rarity_rank, copies_total, created_at
       `,
       [
         req.userId,
-        shirt.key,
-        shirt.name,
+        shirt.shirt_key,
+        shirt.shirt_name,
         shirt.tier,
-        shirt.rarityRank,
-        shirt.probability,
+        shirt.rarity_rank,
+        shirt.total_count,
       ],
     );
 
@@ -342,67 +377,6 @@ app.post("/api/packs/open", requireAuth, async (req, res) => {
     await client.query("ROLLBACK");
     console.error("open-pack error", error);
     res.status(500).json({ error: "Unable to open the pack right now." });
-  } finally {
-    client.release();
-  }
-});
-
-app.post("/api/packs/reset", requireAuth, async (req, res) => {
-  const client = await pool.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    // Temporary dev helper: restore the signed-in user's unopened pack.
-    const userResult = await client.query(
-      `
-        SELECT id
-        FROM users
-        WHERE id = $1
-        FOR UPDATE
-      `,
-      [req.userId],
-    );
-
-    if (!userResult.rowCount) {
-      await client.query("ROLLBACK");
-      res.status(404).json({ error: "User not found." });
-      return;
-    }
-
-    await client.query(
-      `
-        DELETE FROM pulls
-        WHERE user_id = $1
-      `,
-      [req.userId],
-    );
-
-    await client.query(
-      `
-        UPDATE users
-        SET packs_available = 1
-        WHERE id = $1
-      `,
-      [req.userId],
-    );
-
-    const viewer = await fetchViewer(client, req.userId);
-    const leaderboard = await fetchLeaderboard(client);
-
-    await client.query("COMMIT");
-
-    broadcastLeaderboard(leaderboard);
-    setSessionCookie(res, viewer);
-    res.json({
-      ok: true,
-      user: viewer,
-      leaderboard,
-    });
-  } catch (error) {
-    await client.query("ROLLBACK");
-    console.error("reset-pack error", error);
-    res.status(500).json({ error: "Unable to reset the pack right now." });
   } finally {
     client.release();
   }
@@ -579,11 +553,11 @@ async function fetchViewer(db, userId) {
         p.shirt_name,
         p.tier,
         p.rarity_rank,
-        p.probability,
+        p.copies_total,
         p.created_at AS pull_created_at
       FROM users u
       LEFT JOIN LATERAL (
-        SELECT id, shirt_key, shirt_name, tier, rarity_rank, probability, created_at
+        SELECT id, shirt_key, shirt_name, tier, rarity_rank, copies_total, created_at
         FROM pulls
         WHERE user_id = u.id
         ORDER BY created_at DESC
@@ -599,6 +573,7 @@ async function fetchViewer(db, userId) {
   }
 
   const row = result.rows[0];
+  const inventorySummary = await fetchInventorySummary(db);
 
   return {
     id: row.id,
@@ -606,6 +581,8 @@ async function fetchViewer(db, userId) {
     email: row.email,
     displayHandle: createDisplayHandle(row.email),
     packsAvailable: row.packs_available,
+    packsRemaining: inventorySummary.packsRemaining,
+    soldOut: inventorySummary.packsRemaining < 1,
     memberSince: row.created_at,
     latestPull: row.pull_id
       ? serializePull({
@@ -614,7 +591,7 @@ async function fetchViewer(db, userId) {
           shirt_name: row.shirt_name,
           tier: row.tier,
           rarity_rank: row.rarity_rank,
-          probability: row.probability,
+          copies_total: row.copies_total,
           created_at: row.pull_created_at,
         })
       : null,
@@ -630,7 +607,7 @@ async function fetchLeaderboard(db) {
         p.shirt_name,
         p.tier,
         p.rarity_rank,
-        p.probability,
+        p.copies_total,
         p.created_at,
         u.full_name,
         u.email
@@ -647,12 +624,13 @@ async function fetchLeaderboard(db) {
 
   return {
     entries,
+    packsRemaining: await fetchPacksRemaining(db),
     topEntry: entries[0] ?? null,
   };
 }
 
 function serializeLeaderboardEntry(row, index) {
-  const odds = PACK_ODDS.find((shirt) => shirt.key === row.shirt_key);
+  const shirt = SHIRT_BY_KEY[row.shirt_key];
 
   return {
     id: row.id,
@@ -662,27 +640,47 @@ function serializeLeaderboardEntry(row, index) {
     pulledAt: row.created_at,
     shirt: {
       ...serializePull(row),
-      tierLabel: odds?.tierLabel ?? row.shirt_name,
-      accent: odds?.accent ?? "#ffffff",
+      tierLabel: shirt?.tierLabel ?? row.shirt_name,
+      accent: shirt?.accent ?? "#ffffff",
     },
   };
 }
 
 function serializePull(row) {
-  const odds = PACK_ODDS.find((shirt) => shirt.key === row.shirt_key);
+  const shirt = SHIRT_BY_KEY[row.shirt_key];
+  const copiesTotal = Number(row.copies_total);
 
   return {
     id: row.id,
     shirtKey: row.shirt_key,
-    shirtName: odds?.name ?? row.shirt_name,
+    shirtName: shirt?.name ?? row.shirt_name,
     tier: row.tier,
     rarityRank: row.rarity_rank,
-    probability: Number(row.probability),
-    probabilityLabel:
-      odds?.probabilityLabel ?? `${Math.round(Number(row.probability) * 100)}%`,
-    tierLabel: odds?.tierLabel ?? row.shirt_name,
-    accent: odds?.accent ?? "#ffffff",
+    copiesTotal,
+    limitedLabel: getLimitedLabel(copiesTotal),
+    tierLabel: shirt?.tierLabel ?? row.shirt_name,
+    accent: shirt?.accent ?? "#ffffff",
     createdAt: row.created_at,
+  };
+}
+
+async function fetchPacksRemaining(db) {
+  const result = await db.query(
+    `
+      SELECT COALESCE(SUM(remaining_count), 0) AS packs_remaining
+      FROM inventory
+    `,
+  );
+
+  return Number(result.rows[0]?.packs_remaining ?? 0);
+}
+
+async function fetchInventorySummary(db) {
+  const packsRemaining = await fetchPacksRemaining(db);
+
+  return {
+    packsRemaining,
+    totalPacks: TOTAL_PACK_COUNT,
   };
 }
 

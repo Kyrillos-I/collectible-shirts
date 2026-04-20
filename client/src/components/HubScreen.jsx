@@ -5,10 +5,9 @@ import { PackArtwork, ShirtArtwork } from "./Artwork.jsx";
 import PhoneShell from "./PhoneShell.jsx";
 import { SHIRTS } from "../lib/shirts.js";
 
-export default function HubScreen({ viewer, onLogout, onResetPack }) {
+export default function HubScreen({ viewer, onLogout }) {
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
-  const [resettingPack, setResettingPack] = useState(false);
 
   async function handleLogout() {
     try {
@@ -20,14 +19,7 @@ export default function HubScreen({ viewer, onLogout, onResetPack }) {
     }
   }
 
-  async function handleResetPack() {
-    try {
-      setResettingPack(true);
-      await onResetPack();
-    } finally {
-      setResettingPack(false);
-    }
-  }
+  const canOpenPack = viewer.packsAvailable > 0 && !viewer.soldOut;
 
   return (
     <PhoneShell
@@ -61,7 +53,9 @@ export default function HubScreen({ viewer, onLogout, onResetPack }) {
         <h1 className="welcome-title">Welcome, {viewer.fullName}</h1>
         <p className="hero-support">
           {viewer.packsAvailable > 0
-            ? "Your pack is ready to be opened."
+            ? viewer.soldOut
+              ? "All 56 packs have been opened. The run is sold out."
+              : `Your pack is ready. ${viewer.packsRemaining} of 56 packs remain.`
             : "Your pack is opened. Check the leaderboard to see where it landed."}
         </p>
       </section>
@@ -83,10 +77,11 @@ export default function HubScreen({ viewer, onLogout, onResetPack }) {
             <span style={{ color: viewer.latestPull.accent }}>
               {viewer.latestPull.shirtName}
             </span>
+            {` (${viewer.latestPull.limitedLabel})`}
           </p>
         ) : null}
 
-        {viewer.packsAvailable > 0 ? (
+        {canOpenPack ? (
           <button
             className="primary-button"
             onClick={() => navigate("/open")}
@@ -96,15 +91,10 @@ export default function HubScreen({ viewer, onLogout, onResetPack }) {
           </button>
         ) : null}
 
-        {viewer.packsAvailable < 1 ? (
-          <button
-            className="secondary-button"
-            disabled={resettingPack}
-            onClick={handleResetPack}
-            type="button"
-          >
-            {resettingPack ? "Resetting Pack..." : "Temporary Reset Pack"}
-          </button>
+        {viewer.packsAvailable > 0 && viewer.soldOut ? (
+          <p className="helper-text">
+            This limited run is sold out. You can still view the leaderboard.
+          </p>
         ) : null}
       </div>
 
@@ -117,7 +107,7 @@ export default function HubScreen({ viewer, onLogout, onResetPack }) {
                 <h3 className="chance-name" style={{ color: shirt.accent }}>
                   {shirt.name}
                 </h3>
-                <p className="chance-odds">{shirt.probabilityLabel} chance</p>
+                <p className="chance-odds">{shirt.limitedLabel} in the run</p>
               </div>
               <ShirtArtwork className="chance-art" shirtKey={shirt.key} />
             </article>

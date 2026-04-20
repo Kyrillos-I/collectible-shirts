@@ -27,10 +27,18 @@ CREATE TABLE IF NOT EXISTS pulls (
   shirt_name TEXT NOT NULL,
   tier TEXT NOT NULL,
   rarity_rank INTEGER NOT NULL,
-  probability NUMERIC(5, 4) NOT NULL,
+  copies_total INTEGER NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS pulls_rarity_created_at_idx
   ON pulls(rarity_rank ASC, created_at DESC);
 
+CREATE TABLE IF NOT EXISTS inventory (
+  shirt_key TEXT PRIMARY KEY,
+  shirt_name TEXT NOT NULL,
+  tier TEXT NOT NULL,
+  rarity_rank INTEGER NOT NULL,
+  total_count INTEGER NOT NULL,
+  remaining_count INTEGER NOT NULL
+);

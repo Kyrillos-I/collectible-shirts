@@ -63,7 +63,11 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
     window.scrollTo({ top: 0, left: 0 });
   }, [revealedPull]);
 
-  if (viewer.packsAvailable < 1 && !revealedPull && !isOpening) {
+  if (
+    (viewer.packsAvailable < 1 || viewer.soldOut) &&
+    !revealedPull &&
+    !isOpening
+  ) {
     return <Navigate replace to="/home" />;
   }
 
@@ -218,8 +222,8 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
             </p>
             <h2 className="reveal-name">{revealedPull.shirtName}</h2>
             <p className="hero-support">
-              Odds: {revealedPull.probabilityLabel}. The leaderboard updates
-              live as each person opens their pack.
+              Limited run: {revealedPull.limitedLabel}. The leaderboard updates
+              live as each person opens one of the remaining packs.
             </p>
             <div className="button-cluster">
               {renderLeaderboardChip(
@@ -258,8 +262,8 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
             </div>
 
             <p className="helper-text">
-              The knob snaps back if you let go early. Drag nearly all the way
-              to open your pack.
+              {viewer.packsRemaining} of 56 packs remain. The knob snaps back
+              if you let go early. Drag nearly all the way to open your pack.
             </p>
           </>
         )}

@@ -59,7 +59,7 @@ export function ShirtArtwork({ shirtKey, className = "" }) {
           x="120"
           y="82"
         >
-          {theme.probabilityLabel}
+          {theme.limitedLabel}
         </text>
       </g>
     </svg>

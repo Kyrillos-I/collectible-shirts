@@ -7,6 +7,7 @@ import { buildApiUrl, request } from "../lib/api.js";
 export default function LeaderboardScreen({ viewer }) {
   const [leaderboard, setLeaderboard] = useState({
     entries: [],
+    packsRemaining: 0,
     topEntry: null,
   });
   const [sharePanelOpen, setSharePanelOpen] = useState(false);
@@ -89,6 +90,7 @@ export default function LeaderboardScreen({ viewer }) {
     ? `Last update ${formatTime(lastUpdatedAt)}`
     : "Waiting for first update";
   const viewerName = getLeaderboardName(viewer);
+  const packsRemainingLabel = `${leaderboard.packsRemaining ?? 0} of 56 left`;
 
   return (
     <PhoneShell backTo={backTo} backLabel="Home">
@@ -148,6 +150,9 @@ export default function LeaderboardScreen({ viewer }) {
                 <span className="leaderboard-live-dot" />
                 <span>{connectionLabel}</span>
               </div>
+              <div className="leaderboard-live-pill">
+                <span>{packsRemainingLabel}</span>
+              </div>
               <p className="leaderboard-last-updated">{lastUpdatedLabel}</p>
             </div>
           </section>
@@ -171,8 +176,8 @@ export default function LeaderboardScreen({ viewer }) {
               <h1 className="podium-name">{getLeaderboardName(topEntry)}</h1>
               <p className="podium-pull">Opened: {topEntry.shirt.shirtName}</p>
               <div className="podium-probability">
-                <span>Probability</span>
-                <strong>{topEntry.shirt.probabilityLabel}</strong>
+                <span>Limited Run</span>
+                <strong>{topEntry.shirt.limitedLabel}</strong>
               </div>
             </article>
           ) : (
@@ -203,7 +208,7 @@ export default function LeaderboardScreen({ viewer }) {
                       className="entry-tier"
                       style={{ color: entry.shirt.accent }}
                     >
-                      {entry.shirt.tierLabel} ({entry.shirt.probabilityLabel})
+                      {entry.shirt.tierLabel} ({entry.shirt.limitedLabel})
                     </p>
                   </div>
                 </article>

@@ -1,12 +1,11 @@
-export const PACK_ODDS = [
+export const SHIRT_CATALOG = [
   {
     key: "dark-mode",
     name: "Gold Shirt",
     tier: "dark-mode",
     tierLabel: "Gold Shirt",
     rarityRank: 1,
-    probability: 0.03,
-    probabilityLabel: "3%",
+    totalCount: 1,
     accent: "#ffd54d",
   },
   {
@@ -15,8 +14,7 @@ export const PACK_ODDS = [
     tier: "purple-mode",
     tierLabel: "Purple Shirt",
     rarityRank: 2,
-    probability: 0.05,
-    probabilityLabel: "5%",
+    totalCount: 3,
     accent: "#8f5bff",
   },
   {
@@ -25,8 +23,7 @@ export const PACK_ODDS = [
     tier: "blue-mode",
     tierLabel: "Blue Shirt",
     rarityRank: 3,
-    probability: 0.1,
-    probabilityLabel: "10%",
+    totalCount: 5,
     accent: "#4285f4",
   },
   {
@@ -35,8 +32,7 @@ export const PACK_ODDS = [
     tier: "scarlet-mode",
     tierLabel: "Scarlet Shirt",
     rarityRank: 4,
-    probability: 0.3,
-    probabilityLabel: "30%",
+    totalCount: 18,
     accent: "#cc0033",
   },
   {
@@ -45,23 +41,44 @@ export const PACK_ODDS = [
     tier: "basic-mode",
     tierLabel: "Basic Shirt",
     rarityRank: 5,
-    probability: 0.52,
-    probabilityLabel: "52%",
+    totalCount: 29,
     accent: "#f1f1f1",
   },
 ];
 
-export function rollPack() {
-  const roll = Math.random();
-  let cursor = 0;
+export const TOTAL_PACK_COUNT = SHIRT_CATALOG.reduce(
+  (sum, shirt) => sum + shirt.totalCount,
+  0,
+);
 
-  for (const shirt of PACK_ODDS) {
-    cursor += shirt.probability;
+export const SHIRT_BY_KEY = Object.fromEntries(
+  SHIRT_CATALOG.map((shirt) => [shirt.key, shirt]),
+);
 
-    if (roll <= cursor) {
-      return shirt;
+export function getLimitedLabel(totalCount) {
+  return `${totalCount} of ${TOTAL_PACK_COUNT}`;
+}
+
+export function pickInventoryShirt(rows) {
+  const availableRows = rows.filter((row) => Number(row.remaining_count) > 0);
+  const remainingTotal = availableRows.reduce(
+    (sum, row) => sum + Number(row.remaining_count),
+    0,
+  );
+
+  if (remainingTotal < 1) {
+    return null;
+  }
+
+  let roll = Math.floor(Math.random() * remainingTotal);
+
+  for (const row of availableRows) {
+    roll -= Number(row.remaining_count);
+
+    if (roll < 0) {
+      return row;
     }
   }
 
-  return PACK_ODDS.at(-1);
+  return availableRows.at(-1) ?? null;
 }
