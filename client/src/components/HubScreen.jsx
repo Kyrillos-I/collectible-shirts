@@ -55,7 +55,7 @@ export default function HubScreen({ viewer, onLogout }) {
           {viewer.packsAvailable > 0
             ? viewer.soldOut
               ? "All 56 packs have been opened. The run is sold out."
-              : `Your pack is ready. ${viewer.packsRemaining} of 56 packs remain.`
+              : `Your pack is ready. ${viewer.packsRemaining}/56 packs remain.`
             : "Your pack is opened. Check the leaderboard to see where it landed."}
         </p>
       </section>

@@ -55,12 +55,21 @@ export const SHIRT_BY_KEY = Object.fromEntries(
   SHIRT_CATALOG.map((shirt) => [shirt.key, shirt]),
 );
 
+// Temporary test switch: prefer gold when inventory is available.
+export const FORCE_GOLD_SHIRT_FOR_TESTING = true;
+
 export function getLimitedLabel(totalCount) {
-  return `${totalCount} of ${TOTAL_PACK_COUNT}`;
+  return `${totalCount}/${TOTAL_PACK_COUNT}`;
 }
 
 export function pickInventoryShirt(rows) {
   const availableRows = rows.filter((row) => Number(row.remaining_count) > 0);
+  const goldRow = availableRows.find((row) => row.shirt_key === "dark-mode");
+
+  if (FORCE_GOLD_SHIRT_FOR_TESTING && goldRow) {
+    return goldRow;
+  }
+
   const remainingTotal = availableRows.reduce(
     (sum, row) => sum + Number(row.remaining_count),
     0,

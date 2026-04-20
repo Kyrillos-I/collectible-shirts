@@ -262,7 +262,7 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
             </div>
 
             <p className="helper-text">
-              {viewer.packsRemaining} of 56 packs remain. The knob snaps back
+              {viewer.packsRemaining}/56 packs remain. The knob snaps back
               if you let go early. Drag nearly all the way to open your pack.
             </p>
           </>

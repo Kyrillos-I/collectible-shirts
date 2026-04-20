@@ -90,7 +90,7 @@ export default function LeaderboardScreen({ viewer }) {
     ? `Last update ${formatTime(lastUpdatedAt)}`
     : "Waiting for first update";
   const viewerName = getLeaderboardName(viewer);
-  const packsRemainingLabel = `${leaderboard.packsRemaining ?? 0} of 56 left`;
+  const packsRemainingLabel = `${leaderboard.packsRemaining ?? 0}/56 left`;
 
   return (
     <PhoneShell backTo={backTo} backLabel="Home">
