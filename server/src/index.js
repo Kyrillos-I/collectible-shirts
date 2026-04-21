@@ -648,7 +648,7 @@ function serializeLeaderboardEntry(row, index) {
 
 function serializePull(row) {
   const shirt = SHIRT_BY_KEY[row.shirt_key];
-  const copiesTotal = Number(row.copies_total);
+  const copiesTotal = Number(shirt?.totalCount ?? row.copies_total);
 
   return {
     id: row.id,

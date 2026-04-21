@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import PhoneShell from "./PhoneShell.jsx";
 
@@ -63,7 +63,21 @@ export default function VerificationScreen({
   }
 
   return (
-    <PhoneShell backTo="/" backLabel="Edit">
+    <PhoneShell
+      backTo="/"
+      backLabel="Edit"
+      footer={
+        <Link className="leaderboard-chip leaderboard-chip--inline" to="/leaderboard">
+          <img
+            alt=""
+            aria-hidden="true"
+            className="leaderboard-chip-image"
+            src="/images/leaderboard.png"
+          />
+          <span>View Leaderboard</span>
+        </Link>
+      }
+    >
       <section className="auth-hero">
         <h1 className="hero-title">Enter The 6 Digit Code Sent To Your Email</h1>
         <p className="hero-support">{pendingAuth.email}</p>

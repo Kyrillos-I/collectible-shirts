@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import PhoneShell from "./PhoneShell.jsx";
 
@@ -42,7 +42,19 @@ export default function AuthScreen({ onRequestCode }) {
   }
 
   return (
-    <PhoneShell>
+    <PhoneShell
+      footer={
+        <Link className="leaderboard-chip leaderboard-chip--inline" to="/leaderboard">
+          <img
+            alt=""
+            aria-hidden="true"
+            className="leaderboard-chip-image"
+            src="/images/leaderboard.png"
+          />
+          <span>View Leaderboard</span>
+        </Link>
+      }
+    >
       <section className="auth-hero">
         <h1 className="hero-title auth-title">
           Enter Your <span className="hero-accent">Rutgers</span> Email To
