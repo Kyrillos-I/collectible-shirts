@@ -8,7 +8,7 @@ import SwipeOpenScreen from "./components/SwipeOpenScreen.jsx";
 import VerificationScreen from "./components/VerificationScreen.jsx";
 import { request } from "./lib/api.js";
 
-const PENDING_AUTH_KEY = "collectible-shirts.pending-auth";
+const PENDING_AUTH_KEY = "mysteryapparel.pending-auth";
 const HOME_PATH = "/home";
 
 export default function App() {

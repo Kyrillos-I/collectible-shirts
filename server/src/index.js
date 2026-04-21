@@ -526,10 +526,10 @@ async function sendVerificationCode({ email, fullName, code }) {
   await resend.emails.send({
     from: config.resendFromEmail,
     to: [email],
-    subject: "Your Collectible Shirts verification code",
+    subject: "Your MysteryApparel verification code",
     html: `
       <div style="font-family: Arial, sans-serif; background: #131313; color: #ffffff; padding: 24px;">
-        <p style="margin: 0 0 12px; color: #cc0033; font-size: 18px; letter-spacing: 1px;">Collectible Shirts</p>
+        <p style="margin: 0 0 12px; color: #cc0033; font-size: 18px; letter-spacing: 1px;">MysteryApparel</p>
         <p style="margin: 0 0 16px;">Hi ${escapeHtml(fullName)},</p>
         <p style="margin: 0 0 16px;">Use this code to sign in:</p>
         <p style="margin: 0 0 16px; font-size: 32px; font-weight: 700; letter-spacing: 8px;">${code}</p>

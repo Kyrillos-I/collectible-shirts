@@ -107,7 +107,7 @@ export default function LeaderboardScreen({ viewer }) {
           <div className="leaderboard-share-panel__card">
             <p className="leaderboard-share-panel__eyebrow">Scan to open</p>
             <img
-              alt="QR code linking to Collectible Shirts"
+              alt="QR code linking to MysteryApparel"
               className="leaderboard-share-panel__qr"
               src="/images/collectible-shirts-qr (1).png"
             />

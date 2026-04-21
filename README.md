@@ -1,4 +1,4 @@
-# Collectible Shirts
+# MysteryApparel
 
 React frontend + Express backend + PostgreSQL for the Rutgers-themed pack opening app.
 
