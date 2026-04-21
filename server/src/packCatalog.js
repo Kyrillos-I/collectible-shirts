@@ -5,7 +5,7 @@ export const SHIRT_CATALOG = [
     tier: "dark-mode",
     tierLabel: "Gold Shirt",
     rarityRank: 1,
-    totalCount: 1,
+    totalCount: 3,
     accent: "#ffd54d",
   },
   {
@@ -14,7 +14,7 @@ export const SHIRT_CATALOG = [
     tier: "purple-mode",
     tierLabel: "Purple Shirt",
     rarityRank: 2,
-    totalCount: 3,
+    totalCount: 4,
     accent: "#8f5bff",
   },
   {
@@ -41,7 +41,7 @@ export const SHIRT_CATALOG = [
     tier: "basic-mode",
     tierLabel: "Basic Shirt",
     rarityRank: 5,
-    totalCount: 29,
+    totalCount: 26,
     accent: "#f1f1f1",
   },
 ];

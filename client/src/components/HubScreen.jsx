@@ -107,7 +107,10 @@ export default function HubScreen({ viewer, onLogout }) {
                 <h3 className="chance-name" style={{ color: shirt.accent }}>
                   {shirt.name}
                 </h3>
-                <p className="chance-odds">{shirt.limitedLabel} in the run</p>
+                <p className="chance-odds">
+                  {shirt.limitedLabel} in the run
+                  {` (${formatOddsPercent(shirt.totalCount)})`}
+                </p>
               </div>
               <ShirtArtwork className="chance-art" shirtKey={shirt.key} />
             </article>
@@ -116,4 +119,8 @@ export default function HubScreen({ viewer, onLogout }) {
       </section>
     </PhoneShell>
   );
+}
+
+function formatOddsPercent(totalCount) {
+  return `${((totalCount / 56) * 100).toFixed(1)}% odds`;
 }

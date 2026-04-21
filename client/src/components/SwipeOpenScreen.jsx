@@ -210,7 +210,7 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
         >
           {revealedPull
             ? revealedPull.shirtKey === GOLD_SHIRT_KEY
-              ? "You Got Gold! Enjoy Your Giftcard"
+              ? "You Got Gold! Enjoy Your Gift Card"
               : "Your Pack Is Open!"
             : "Slide To Open Your Pack!"}
         </h1>
@@ -222,8 +222,9 @@ export default function SwipeOpenScreen({ viewer, onOpenPack }) {
             </p>
             <h2 className="reveal-name">{revealedPull.shirtName}</h2>
             <p className="hero-support">
-              Limited run: {revealedPull.limitedLabel}. The leaderboard updates
-              live as each person opens one of the remaining packs.
+              Odds in the full run: {revealedPull.limitedLabel}. The
+              leaderboard updates live as each person opens one of the
+              remaining packs.
             </p>
             <div className="button-cluster">
               {renderLeaderboardChip(
