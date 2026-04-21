@@ -11,7 +11,7 @@ export default function PhoneShell({
       <div className="page-shell">
         <header className="brand-header">
           <div className="brand-copy">
-            <p className="brand-title">MysteryApparel</p>
+            <p className="brand-title">Mystery Apparel</p>
             <p className="brand-subtitle">Intro To Entrep. Spring 2026</p>
           </div>
         </header>
