@@ -614,7 +614,7 @@ async function fetchLeaderboard(db) {
       FROM pulls p
       INNER JOIN users u ON u.id = p.user_id
       ORDER BY p.rarity_rank ASC, p.created_at DESC
-      LIMIT 10
+      LIMIT 50
     `,
   );
 
